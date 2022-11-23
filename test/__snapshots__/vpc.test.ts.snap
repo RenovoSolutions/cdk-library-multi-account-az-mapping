@@ -1,0 +1,996 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "BootstrapVersion": Object {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "az1Parameter": Object {
+      "Default": "/az-mapping/az1",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "az2Parameter": Object {
+      "Default": "/az-mapping/az2",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": Object {
+    "AzIdToNameMappinghandler3666E550": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerRole0E94DF36",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "8ac18e1cd40358a450774c99aacf14e2f6dacab36550fe717fa5e81377d57b67.zip",
+        },
+        "Description": "Stores VPC mappings into parameter store",
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "AzIdToNameMappinghandlerRole0E94DF36",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 5,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AzIdToNameMappinghandlerLogRetentionF9577626": Object {
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "/aws/lambda/",
+              Object {
+                "Ref": "AzIdToNameMappinghandler3666E550",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "AzIdToNameMappinghandlerPolicyBA4D5D94": Object {
+      "Properties": Object {
+        "Description": "",
+        "Path": "/",
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ssm:PutParameter",
+                "ssm:DeleteParameter",
+                "ssm:AddTagsToResource",
+              ],
+              "Condition": Object {
+                "StringEquals": Object {
+                  "aws:ResourceTag/CdkAzMappingParameter": "True",
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "AllowSSMParameterEdit",
+            },
+            Object {
+              "Action": "ec2:DescribeAvailabilityZones",
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "AllowDescribeAZs",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+    "AzIdToNameMappinghandlerRole0E94DF36": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Ref": "AzIdToNameMappinghandlerPolicyBA4D5D94",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AzIdToNameMappingmappingFF3EB1A2": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+            "Arn",
+          ],
+        },
+        "azIds": Array [
+          "use1-az2",
+          "use1-az4",
+          "use1-az6",
+        ],
+        "prefix": "/az-mapping/",
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "AzIdToNameMappingproviderframeworkonEventBFEE6465": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "6ff23d2800aac27308e31c227529dc13854507c3b2598d2433fcf82604fa054d.zip",
+        },
+        "Description": "AWS CDK resource provider framework - onEvent (TestStack/AzIdToNameMapping/provider)",
+        "Environment": Object {
+          "Variables": Object {
+            "USER_ON_EVENT_FUNCTION_ARN": Object {
+              "Fn::GetAtt": Array [
+                "AzIdToNameMappinghandler3666E550",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.onEvent",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D": Object {
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "/aws/lambda/",
+              Object {
+                "Ref": "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "AzIdToNameMappinghandler3666E550",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "AzIdToNameMappinghandler3666E550",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "Roles": Array [
+          Object {
+            "Ref": "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": Object {
+      "DependsOn": Array [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "eb5b005c858404ea0c8f68098ed5dcdf5340e02461f149751d10f59c210d5ef8.zip",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": Array [
+          Object {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "vpcA2121C38": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "vpcIGWE57CBDCA": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "vpcPrivateSubnet1DefaultRoute1AA8E2E5": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "vpcPublicSubnet1NATGateway9C16659E",
+        },
+        "RouteTableId": Object {
+          "Ref": "vpcPrivateSubnet1RouteTableB41A48CC",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "vpcPrivateSubnet1RouteTableAssociation67945127": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcPrivateSubnet1RouteTableB41A48CC",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcPrivateSubnet1Subnet934893E8",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcPrivateSubnet1RouteTableB41A48CC": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcPrivateSubnet1Subnet934893E8": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Ref": "az1Parameter",
+        },
+        "CidrBlock": "10.0.128.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PrivateSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcPrivateSubnet2DefaultRouteB0E07F99": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "vpcPublicSubnet2NATGateway9B8AE11A",
+        },
+        "RouteTableId": Object {
+          "Ref": "vpcPrivateSubnet2RouteTable7280F23E",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "vpcPrivateSubnet2RouteTable7280F23E": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcPrivateSubnet2RouteTableAssociation007E94D3": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcPrivateSubnet2RouteTable7280F23E",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcPrivateSubnet2Subnet7031C2BA",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcPrivateSubnet2Subnet7031C2BA": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Ref": "az2Parameter",
+        },
+        "CidrBlock": "10.0.192.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PrivateSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcPublicSubnet1DefaultRoute10708846": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+        "vpcVPCGW7984C166",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "vpcIGWE57CBDCA",
+        },
+        "RouteTableId": Object {
+          "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "vpcPublicSubnet1EIPDA49DCBE": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "vpcPublicSubnet1NATGateway9C16659E": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+        "vpcPublicSubnet1DefaultRoute10708846",
+        "vpcPublicSubnet1RouteTableAssociation5D3F4579",
+      ],
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "vpcPublicSubnet1EIPDA49DCBE",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "vpcPublicSubnet1Subnet2E65531E",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "vpcPublicSubnet1RouteTable48A2DF9B": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcPublicSubnet1RouteTableAssociation5D3F4579": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcPublicSubnet1Subnet2E65531E",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcPublicSubnet1Subnet2E65531E": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Ref": "az1Parameter",
+        },
+        "CidrBlock": "10.0.0.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcPublicSubnet2DefaultRouteA1EC0F60": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+        "vpcVPCGW7984C166",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "vpcIGWE57CBDCA",
+        },
+        "RouteTableId": Object {
+          "Ref": "vpcPublicSubnet2RouteTableEB40D4CB",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "vpcPublicSubnet2EIP9B3743B1": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "vpcPublicSubnet2NATGateway9B8AE11A": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+        "vpcPublicSubnet2DefaultRouteA1EC0F60",
+        "vpcPublicSubnet2RouteTableAssociation21F81B59",
+      ],
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "vpcPublicSubnet2EIP9B3743B1",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "vpcPublicSubnet2Subnet009B674F",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "vpcPublicSubnet2RouteTableAssociation21F81B59": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcPublicSubnet2RouteTableEB40D4CB",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcPublicSubnet2Subnet009B674F",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcPublicSubnet2RouteTableEB40D4CB": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcPublicSubnet2Subnet009B674F": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Ref": "az2Parameter",
+        },
+        "CidrBlock": "10.0.64.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "TestStack/vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcVPCGW7984C166": Object {
+      "DependsOn": Array [
+        "AzIdToNameMappinghandlerLogRetentionF9577626",
+        "AzIdToNameMappinghandler3666E550",
+        "AzIdToNameMappinghandlerPolicyBA4D5D94",
+        "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappingmappingFF3EB1A2",
+        "AzIdToNameMappingproviderframeworkonEventLogRetention3F7CD54D",
+        "AzIdToNameMappingproviderframeworkonEventBFEE6465",
+        "AzIdToNameMappingproviderframeworkonEventServiceRoleDefaultPolicyDF224E6A",
+        "AzIdToNameMappingproviderframeworkonEventServiceRole07035C5C",
+      ],
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "vpcIGWE57CBDCA",
+        },
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+  },
+  "Rules": Object {
+    "CheckBootstrapVersion": Object {
+      "Assertions": Array [
+        Object {
+          "Assert": Object {
+            "Fn::Not": Array [
+              Object {
+                "Fn::Contains": Array [
+                  Array [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  Object {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
