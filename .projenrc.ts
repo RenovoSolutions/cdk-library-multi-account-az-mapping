@@ -21,6 +21,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
     },
     exclude: ['projen'],
   },
+  devDeps: [
+    'jest-cdk-snapshot',
+    '@aws-cdk/assert',
+  ],
   githubOptions: {
     mergify: true,
     mergifyOptions: {

@@ -4,7 +4,7 @@ import {
   aws_ec2 as ec2,
   aws_ssm as ssm,
 } from 'aws-cdk-lib';
-import { Template } from 'aws-cdk-lib/assertions';
+import 'jest-cdk-snapshot';
 import {
   AzIdToNameMapping,
 } from '../src/index';
@@ -25,5 +25,7 @@ test('Snapshot', () => {
 
   vpc.node.addDependency(mapping);
 
-  expect(Template.fromStack(stack)).toMatchSnapshot();
+  expect(stack).toMatchCdkSnapshot({
+    ignoreAssets: true,
+  });
 });
