@@ -3,7 +3,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   projenrcTs: true,
   author: 'Renovo Solutions',
   authorAddress: 'webmaster+cdk@renovo1.com',
-  cdkVersion: '2.66.1',
+  cdkVersion: '2.67.0',
   defaultReleaseBranch: 'main',
   name: '@renovosolutions/cdk-library-multi-account-az-mapping',
   description: 'AWS CDK Construct Library to map zone-ids to zone-names to support multi-account zonal consistency for VPCs',
