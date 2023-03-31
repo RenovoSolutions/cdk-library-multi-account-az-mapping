@@ -1,5 +1,21 @@
+#!/usr/bin/env python3
+
 import boto3
-def handler(event, context):
+from crhelper import CfnResource
+from botocore.exceptions import ClientError
+
+helper = CfnResource()
+
+try:
+  pass
+except Exception as e:
+  helper.init_failure(e)
+
+@helper.create
+@helper.update
+@helper.delete
+def on_event(event, context):
+    print(event)
     azIds = event['ResourceProperties']['azIds']
     prefix = event['ResourceProperties']['prefix']
     if event['RequestType'] == 'Create':
@@ -12,9 +28,8 @@ def handler(event, context):
         delete(oldAzIds, oldPrefix)
         create(azIds, prefix)
     else:
-        print('no changes')
-    response_data = {}
-    return response_data
+        raise Exception("Invalid request type: %s" % event['RequestType'])
+
 # Use the ordered parameter list of azIds (zone ids) to create SSM Parameters 
 # for the AZ Mapping. Store the resulting zone name mapping along with the zone-id
 def create(azIds, prefix):
@@ -38,6 +53,7 @@ def create(azIds, prefix):
                 }
             ],
             Tier='Standard')
+
 # Delete the az mapping parameters
 def delete(azIds, prefix):
     ssm = boto3.client('ssm')
@@ -49,6 +65,7 @@ def delete(azIds, prefix):
             Name=prefix + 'az' + str(azNumber)
             )
         azNumber = azNumber + 1
+
 # Get the AZ objects that match the given zone IDs
 def getAZs(azIds):
     ec2c = boto3.client('ec2')
@@ -57,3 +74,6 @@ def getAZs(azIds):
         )
     azs = r.get('AvailabilityZones')
     return azs
+
+def handler(event, context):
+  helper(event, context)

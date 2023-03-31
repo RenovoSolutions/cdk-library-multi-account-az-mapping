@@ -1824,7 +1824,7 @@ the lambda function code from S3 or some other location because
 the CDK cant upload the local code to the correct asset location
 for the StackSet target accounts.
 
-You can use the included `AccessKeyFunctionCodeCache` class to
+You can use the included `AzIdToNameMappingFunctionCodeCache` class to
 cache the lambda function code in S3 and create a cross
 account access policy to allow the StackSet target accounts
 to access the code.
