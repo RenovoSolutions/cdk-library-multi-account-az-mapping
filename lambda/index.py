@@ -19,14 +19,15 @@ def on_event(event, context):
     azIds = event['ResourceProperties']['azIds']
     prefix = event['ResourceProperties']['prefix']
     if event['RequestType'] == 'Create':
-        create(azIds, prefix)
+        return create(azIds, prefix)
     elif event['RequestType'] == 'Delete':
         delete(azIds, prefix)
+        return event['PhysicalResourceId']
     elif event['RequestType'] == 'Update':
         oldAzIds = event['OldResourceProperties']['azIds']
         oldPrefix = event['OldResourceProperties']['prefix']
         delete(oldAzIds, oldPrefix)
-        create(azIds, prefix)
+        return create(azIds, prefix)
     else:
         raise Exception("Invalid request type: %s" % event['RequestType'])
 
@@ -53,6 +54,8 @@ def create(azIds, prefix):
                 }
             ],
             Tier='Standard')
+        
+    return None
 
 # Delete the az mapping parameters
 def delete(azIds, prefix):

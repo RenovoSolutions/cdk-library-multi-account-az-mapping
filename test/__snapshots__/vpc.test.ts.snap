@@ -79,7 +79,7 @@ Object {
       "Type": "AWS::IAM::Role",
     },
     "AzIdToNameMappinglogGroup3282D2C7": Object {
-      "DeletionPolicy": "Retain",
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "LogGroupName": Object {
           "Fn::Join": Array [
@@ -95,7 +95,7 @@ Object {
         "RetentionInDays": 30,
       },
       "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
     },
     "AzIdToNameMappingmappingFF3EB1A2": Object {
       "DeletionPolicy": "Delete",
