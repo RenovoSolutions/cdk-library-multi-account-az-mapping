@@ -1785,6 +1785,7 @@ const azIdToNameMappingProps: AzIdToNameMappingProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingProps.property.azIds">azIds</a></code> | <code>string[]</code> | The target AZ IDs for mapping. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingProps.property.lambdaCode">lambdaCode</a></code> | <code>aws-cdk-lib.aws_lambda.Code</code> | The lambda function code to use for the custom resource. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days to retain log events in CloudWatch logs. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingProps.property.ssmParameterPrefix">ssmParameterPrefix</a></code> | <code>string</code> | The prefix to use for the SSM parameter names. |
 
@@ -1802,6 +1803,31 @@ public readonly azIds: string[];
 The target AZ IDs for mapping.
 
 Defaults to values for 3 zones in us-east-1.
+
+---
+
+##### `lambdaCode`<sup>Optional</sup> <a name="lambdaCode" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingProps.property.lambdaCode"></a>
+
+```typescript
+public readonly lambdaCode: Code;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Code
+- *Default:* default lambda function code
+
+The lambda function code to use for the custom resource.
+
+For most use cases this should be left as the default, but
+in cases where the custom resource needs to be deployed through
+something like CloudFormation StackSets you may need to source
+the lambda function code from S3 or some other location because
+the CDK cant upload the local code to the correct asset location
+for the StackSet target accounts.
+
+You can use the included `AccessKeyFunctionCodeCache` class to
+cache the lambda function code in S3 and create a cross
+account access policy to allow the StackSet target accounts
+to access the code.
 
 ---
 

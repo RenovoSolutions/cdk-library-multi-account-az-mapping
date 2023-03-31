@@ -34,6 +34,24 @@ export interface AzIdToNameMappingProps {
    * @default logs.RetentionDays.ONE_MONTH
    */
   readonly logRetention?: logs.RetentionDays;
+  /**
+   * The lambda function code to use for the custom resource.
+   *
+   * For most use cases this should be left as the default, but
+   * in cases where the custom resource needs to be deployed through
+   * something like CloudFormation StackSets you may need to source
+   * the lambda function code from S3 or some other location because
+   * the CDK cant upload the local code to the correct asset location
+   * for the StackSet target accounts.
+   *
+   * You can use the included `AccessKeyFunctionCodeCache` class to
+   * cache the lambda function code in S3 and create a cross
+   * account access policy to allow the StackSet target accounts
+   * to access the code.
+   *
+   * @default - default lambda function code
+   */
+  readonly lambdaCode?: lambda.Code;
 }
 
 export class AzIdToNameMapping extends Construct {
@@ -86,7 +104,7 @@ export class AzIdToNameMapping extends Construct {
 
     const onEventHandler = new lambda.Function(this, 'handler', {
       runtime: lambda.Runtime.PYTHON_3_8,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+      code: props.lambdaCode ?? lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
       handler: 'index.handler',
       description: 'Stores VPC mappings into parameter store',
       timeout: Duration.seconds(5),
