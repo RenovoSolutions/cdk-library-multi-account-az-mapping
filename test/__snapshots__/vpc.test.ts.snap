@@ -23,29 +23,6 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "AzIdToNameMappinghandlerLogRetentionF9577626": Object {
-      "Properties": Object {
-        "LogGroupName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "/aws/lambda/",
-              Object {
-                "Ref": "AzIdToNameMappinghandler3666E550",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
     "AzIdToNameMappinghandlerPolicyBA4D5D94": Object {
       "Properties": Object {
         "Description": "",
@@ -101,6 +78,25 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
+    "AzIdToNameMappinglogGroup3282D2C7": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "/aws/lambda/",
+              Object {
+                "Ref": "AzIdToNameMappinghandler3666E550",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "AzIdToNameMappingmappingFF3EB1A2": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
@@ -120,85 +116,12 @@ Object {
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
     },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": Object {
-      "DependsOn": Array [
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-      ],
-      "Properties": Object {
-        "Code": Any<Object>,
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "logs:PutRetentionPolicy",
-                "logs:DeleteRetentionPolicy",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "Roles": Array [
-          Object {
-            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
     "vpcA2121C38": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -217,10 +140,10 @@ Object {
     },
     "vpcIGWE57CBDCA": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -235,10 +158,10 @@ Object {
     },
     "vpcPrivateSubnet1DefaultRoute1AA8E2E5": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -254,10 +177,10 @@ Object {
     },
     "vpcPrivateSubnet1RouteTableAssociation67945127": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -272,10 +195,10 @@ Object {
     },
     "vpcPrivateSubnet1RouteTableB41A48CC": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -293,10 +216,10 @@ Object {
     },
     "vpcPrivateSubnet1Subnet934893E8": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -327,10 +250,10 @@ Object {
     },
     "vpcPrivateSubnet2DefaultRouteB0E07F99": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -346,10 +269,10 @@ Object {
     },
     "vpcPrivateSubnet2RouteTable7280F23E": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -367,10 +290,10 @@ Object {
     },
     "vpcPrivateSubnet2RouteTableAssociation007E94D3": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -385,10 +308,10 @@ Object {
     },
     "vpcPrivateSubnet2Subnet7031C2BA": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -419,10 +342,10 @@ Object {
     },
     "vpcPublicSubnet1DefaultRoute10708846": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
         "vpcVPCGW7984C166",
       ],
@@ -439,10 +362,10 @@ Object {
     },
     "vpcPublicSubnet1EIPDA49DCBE": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -458,10 +381,10 @@ Object {
     },
     "vpcPublicSubnet1NATGateway9C16659E": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
         "vpcPublicSubnet1DefaultRoute10708846",
         "vpcPublicSubnet1RouteTableAssociation5D3F4579",
@@ -487,10 +410,10 @@ Object {
     },
     "vpcPublicSubnet1RouteTable48A2DF9B": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -508,10 +431,10 @@ Object {
     },
     "vpcPublicSubnet1RouteTableAssociation5D3F4579": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -526,10 +449,10 @@ Object {
     },
     "vpcPublicSubnet1Subnet2E65531E": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -560,10 +483,10 @@ Object {
     },
     "vpcPublicSubnet2DefaultRouteA1EC0F60": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
         "vpcVPCGW7984C166",
       ],
@@ -580,10 +503,10 @@ Object {
     },
     "vpcPublicSubnet2EIP9B3743B1": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -599,10 +522,10 @@ Object {
     },
     "vpcPublicSubnet2NATGateway9B8AE11A": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
         "vpcPublicSubnet2DefaultRouteA1EC0F60",
         "vpcPublicSubnet2RouteTableAssociation21F81B59",
@@ -628,10 +551,10 @@ Object {
     },
     "vpcPublicSubnet2RouteTableAssociation21F81B59": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -646,10 +569,10 @@ Object {
     },
     "vpcPublicSubnet2RouteTableEB40D4CB": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -667,10 +590,10 @@ Object {
     },
     "vpcPublicSubnet2Subnet009B674F": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
@@ -701,10 +624,10 @@ Object {
     },
     "vpcVPCGW7984C166": Object {
       "DependsOn": Array [
-        "AzIdToNameMappinghandlerLogRetentionF9577626",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
+        "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
       "Properties": Object {
