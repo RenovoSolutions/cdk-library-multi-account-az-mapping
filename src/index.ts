@@ -113,6 +113,7 @@ export class AzIdToNameMapping extends Construct {
     new logs.LogGroup(this, 'logGroup', {
       logGroupName: `/aws/lambda/${onEventHandler.functionName}`,
       retention: props.logRetention ?? logs.RetentionDays.ONE_MONTH,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
     const mapping = new CustomResource(this, 'mapping', {
