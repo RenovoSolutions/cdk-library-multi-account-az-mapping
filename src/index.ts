@@ -107,8 +107,12 @@ export class AzIdToNameMapping extends Construct {
       handler: 'index.handler',
       description: 'Stores VPC mappings into parameter store',
       timeout: Duration.seconds(5),
-      logRetention: props.logRetention ?? logs.RetentionDays.ONE_MONTH,
       role,
+    });
+
+    new logs.LogGroup(this, 'logGroup', {
+      logGroupName: `/aws/lambda/${onEventHandler.functionName}`,
+      retention: props.logRetention ?? logs.RetentionDays.ONE_MONTH,
     });
 
     const mapping = new CustomResource(this, 'mapping', {
