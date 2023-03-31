@@ -132,7 +132,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     const bundlingCmds = [
       'mkdir -p /asset-output',
       'mkdir -p temp',
-      'pip install -r /asset-input/requirements.txt -t /asset-input/temp',
+      // 'pip install -r /asset-input/requirements.txt -t /asset-input/temp',
       'cp index.py /asset-input/temp/index.py',
       'cd temp',
       'zip -r lambda.zip .',
