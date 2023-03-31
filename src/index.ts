@@ -3,7 +3,6 @@ import {
   aws_lambda as lambda,
   Duration,
   aws_logs as logs,
-  custom_resources as cr,
   CustomResource,
   aws_iam as iam,
   aws_s3 as s3,
@@ -44,7 +43,7 @@ export interface AzIdToNameMappingProps {
    * the CDK cant upload the local code to the correct asset location
    * for the StackSet target accounts.
    *
-   * You can use the included `AccessKeyFunctionCodeCache` class to
+   * You can use the included `AzIdToNameMappingFunctionCodeCache` class to
    * cache the lambda function code in S3 and create a cross
    * account access policy to allow the StackSet target accounts
    * to access the code.
@@ -112,13 +111,8 @@ export class AzIdToNameMapping extends Construct {
       role,
     });
 
-    const provider = new cr.Provider(this, 'provider', {
-      onEventHandler,
-      logRetention: props.logRetention ?? logs.RetentionDays.ONE_MONTH,
-    });
-
     const mapping = new CustomResource(this, 'mapping', {
-      serviceToken: provider.serviceToken,
+      serviceToken: onEventHandler.functionArn,
       properties: {
         azIds: props.azIds || ['use1-az2', 'use1-az4', 'use1-az6'],
         prefix: props.ssmParameterPrefix || '/az-mapping/',
@@ -150,7 +144,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     const bundlingCmds = [
       'mkdir -p /asset-output',
       'mkdir -p temp',
-      // 'pip install -r /asset-input/requirements.txt -t /asset-input/temp',
+      'pip install -r /asset-input/requirements.txt -t /asset-input/temp',
       'cp index.py /asset-input/temp/index.py',
       'cd temp',
       'zip -r lambda.zip .',
