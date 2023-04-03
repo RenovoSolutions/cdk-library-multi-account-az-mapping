@@ -37,6 +37,7 @@ def create(azIds, prefix):
     ssm = boto3.client('ssm')
     
     azs = getAZs(azIds)
+    params = []
     for az in azs:
         azId = az.get('ZoneId')
         azName = az.get('ZoneName')
@@ -54,6 +55,15 @@ def create(azIds, prefix):
                 }
             ],
             Tier='Standard')
+        params.append({
+            prefix + 'az' + str(azNumber): azName
+        })
+
+    helper.Data.update({
+        'azMapping': params
+    })
+    
+    print(helper.Data)
         
     return None
 
