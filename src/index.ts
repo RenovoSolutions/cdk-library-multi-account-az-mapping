@@ -101,9 +101,22 @@ export class AzIdToNameMapping extends Construct {
       ],
     });
 
+    const bundlingCmds = [
+      'mkdir -p /asset-output',
+      'pip install -r /asset-input/requirements.txt -t /asset-output',
+      'cp index.py /asset-output/index.py',
+    ];
+
     const onEventHandler = new lambda.Function(this, 'handler', {
       runtime: lambda.Runtime.PYTHON_3_8,
-      code: props.lambdaCode ?? lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+      code: props.lambdaCode ?? lambda.Code.fromAsset(path.join(__dirname, '../lambda'), {
+        bundling: {
+          image: lambda.Runtime.PYTHON_3_9.bundlingImage,
+          command: [
+            'bash', '-c', bundlingCmds.join(' && '),
+          ],
+        },
+      }),
       handler: 'index.handler',
       description: 'Stores VPC mappings into parameter store',
       timeout: Duration.seconds(5),
