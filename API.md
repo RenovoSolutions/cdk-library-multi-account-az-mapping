@@ -401,6 +401,8 @@ The principal.
 
 Restrict the permission to a certain key pattern (default '*').
 
+Parameter type is `any` but `string` should be passed in.
+
 ---
 
 ##### `grantPublicAccess` <a name="grantPublicAccess" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantPublicAccess"></a>
@@ -473,6 +475,8 @@ The principal.
 
 Restrict the permission to a certain key pattern (default '*').
 
+Parameter type is `any` but `string` should be passed in.
+
 ---
 
 ##### `grantPutAcl` <a name="grantPutAcl" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantPutAcl"></a>
@@ -523,6 +527,8 @@ The principal.
 - *Type:* any
 
 Restrict the permission to a certain key pattern (default '*').
+
+Parameter type is `any` but `string` should be passed in.
 
 ---
 
@@ -1343,6 +1349,7 @@ const azIdToNameMappingFunctionCodeCacheProps: AzIdToNameMappingFunctionCodeCach
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the bucket is removed from this stack. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.serverAccessLogsBucket">serverAccessLogsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination bucket for the server access logs. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.serverAccessLogsPrefix">serverAccessLogsPrefix</a></code> | <code>string</code> | Optional log file prefix to use for the bucket's access logs. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.targetObjectKeyFormat">targetObjectKeyFormat</a></code> | <code>aws-cdk-lib.aws_s3.TargetObjectKeyFormat</code> | Optional key format for log objects. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.transferAcceleration">transferAcceleration</a></code> | <code>boolean</code> | Whether this bucket should have transfer acceleration turned on or not. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.versioned">versioned</a></code> | <code>boolean</code> | Whether this bucket should have versioning turned on or not. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.websiteErrorDocument">websiteErrorDocument</a></code> | <code>string</code> | The name of the error document (e.g. "404.html") for the website. `websiteIndexDocument` must also be set if this is set. |
@@ -1703,6 +1710,19 @@ public readonly serverAccessLogsPrefix: string;
 Optional log file prefix to use for the bucket's access logs.
 
 If defined without "serverAccessLogsBucket", enables access logs to current bucket with this prefix.
+
+---
+
+##### `targetObjectKeyFormat`<sup>Optional</sup> <a name="targetObjectKeyFormat" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.targetObjectKeyFormat"></a>
+
+```typescript
+public readonly targetObjectKeyFormat: TargetObjectKeyFormat;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.TargetObjectKeyFormat
+- *Default:* the default key format is: [DestinationPrefix][YYYY]-[MM]-[DD]-[hh]-[mm]-[ss]-[UniqueString]
+
+Optional key format for log objects.
 
 ---
 
