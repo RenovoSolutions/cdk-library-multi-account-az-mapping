@@ -16,7 +16,7 @@ test('Snapshot', () => {
   const mapping = new AzIdToNameMapping(stack, 'AzIdToNameMapping', {});
 
   const vpc = new ec2.Vpc(stack, 'vpc', {
-    cidr: '10.0.0.0/16',
+    ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
     availabilityZones: [
       ssm.StringParameter.fromStringParameterName(stack, 'az1', '/az-mapping/az1').stringValue,
       ssm.StringParameter.fromStringParameterName(stack, 'az2', '/az-mapping/az2').stringValue,

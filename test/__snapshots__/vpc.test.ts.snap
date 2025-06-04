@@ -1,42 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Snapshot 1`] = `
-Object {
+{
   "Parameters": Any<Object>,
-  "Resources": Object {
-    "AzIdToNameMappinghandler3666E550": Object {
-      "DependsOn": Array [
+  "Resources": {
+    "AzIdToNameMappinghandler3666E550": {
+      "DependsOn": [
         "AzIdToNameMappinghandlerRole0E94DF36",
       ],
-      "Properties": Object {
+      "Properties": {
         "Code": Any<Object>,
         "Description": "Stores VPC mappings into parameter store",
         "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
+        "Role": {
+          "Fn::GetAtt": [
             "AzIdToNameMappinghandlerRole0E94DF36",
             "Arn",
           ],
         },
-        "Runtime": "python3.8",
+        "Runtime": "python3.13",
         "Timeout": 5,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "AzIdToNameMappinghandlerPolicyBA4D5D94": Object {
-      "Properties": Object {
+    "AzIdToNameMappinghandlerLogGroupCDB14C15": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "AzIdToNameMappinghandler3666E550",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "AzIdToNameMappinghandlerPolicyBA4D5D94": {
+      "Properties": {
         "Description": "",
         "Path": "/",
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "ssm:PutParameter",
                 "ssm:DeleteParameter",
                 "ssm:AddTagsToResource",
               ],
-              "Condition": Object {
-                "StringEquals": Object {
+              "Condition": {
+                "StringEquals": {
                   "aws:ResourceTag/CdkAzMappingParameter": "True",
                 },
               },
@@ -44,7 +63,7 @@ Object {
               "Resource": "*",
               "Sid": "AllowSSMParameterEdit",
             },
-            Object {
+            {
               "Action": "ec2:DescribeAvailabilityZones",
               "Effect": "Allow",
               "Resource": "*",
@@ -56,37 +75,37 @@ Object {
       },
       "Type": "AWS::IAM::ManagedPolicy",
     },
-    "AzIdToNameMappinghandlerRole0E94DF36": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "AzIdToNameMappinghandlerRole0E94DF36": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "lambda.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
+        "ManagedPolicyArns": [
+          {
             "Ref": "AzIdToNameMappinghandlerPolicyBA4D5D94",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "AzIdToNameMappinglogGroup3282D2C7": Object {
+    "AzIdToNameMappinglogGroup3282D2C7": {
       "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "LogGroupName": Object {
-          "Fn::Join": Array [
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
             "",
-            Array [
+            [
               "/aws/lambda/",
-              Object {
+              {
                 "Ref": "AzIdToNameMappinghandler3666E550",
               },
             ],
@@ -97,16 +116,16 @@ Object {
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
     },
-    "AzIdToNameMappingmappingFF3EB1A2": Object {
+    "AzIdToNameMappingmappingFF3EB1A2": {
       "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
             "AzIdToNameMappinghandler3666E550",
             "Arn",
           ],
         },
-        "azIds": Array [
+        "azIds": [
           "use1-az2",
           "use1-az4",
           "use1-az6",
@@ -116,21 +135,22 @@ Object {
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
     },
-    "vpcA2121C38": Object {
-      "DependsOn": Array [
+    "vpcA2121C38": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
+      "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
         "EnableDnsSupport": true,
         "InstanceTenancy": "default",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc",
           },
@@ -138,17 +158,18 @@ Object {
       },
       "Type": "AWS::EC2::VPC",
     },
-    "vpcIGWE57CBDCA": Object {
-      "DependsOn": Array [
+    "vpcIGWE57CBDCA": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc",
           },
@@ -156,192 +177,201 @@ Object {
       },
       "Type": "AWS::EC2::InternetGateway",
     },
-    "vpcPrivateSubnet1DefaultRoute1AA8E2E5": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet1DefaultRoute1AA8E2E5": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": Object {
+        "NatGatewayId": {
           "Ref": "vpcPublicSubnet1NATGateway9C16659E",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "vpcPrivateSubnet1RouteTableB41A48CC",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "vpcPrivateSubnet1RouteTableAssociation67945127": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet1RouteTableAssociation67945127": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "RouteTableId": Object {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "vpcPrivateSubnet1RouteTableB41A48CC",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcPrivateSubnet1Subnet934893E8",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "vpcPrivateSubnet1RouteTableB41A48CC": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet1RouteTableB41A48CC": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PrivateSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcPrivateSubnet1Subnet934893E8": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet1Subnet934893E8": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "AvailabilityZone": Object {
+      "Properties": {
+        "AvailabilityZone": {
           "Ref": "az1Parameter",
         },
         "CidrBlock": "10.0.128.0/18",
         "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PrivateSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "vpcPrivateSubnet2DefaultRouteB0E07F99": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet2DefaultRouteB0E07F99": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": Object {
+        "NatGatewayId": {
           "Ref": "vpcPublicSubnet2NATGateway9B8AE11A",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "vpcPrivateSubnet2RouteTable7280F23E",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "vpcPrivateSubnet2RouteTable7280F23E": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet2RouteTable7280F23E": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PrivateSubnet2",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcPrivateSubnet2RouteTableAssociation007E94D3": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet2RouteTableAssociation007E94D3": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "RouteTableId": Object {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "vpcPrivateSubnet2RouteTable7280F23E",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcPrivateSubnet2Subnet7031C2BA",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "vpcPrivateSubnet2Subnet7031C2BA": Object {
-      "DependsOn": Array [
+    "vpcPrivateSubnet2Subnet7031C2BA": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "AvailabilityZone": Object {
+      "Properties": {
+        "AvailabilityZone": {
           "Ref": "az2Parameter",
         },
         "CidrBlock": "10.0.192.0/18",
         "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Private",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PrivateSubnet2",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "vpcPublicSubnet1DefaultRoute10708846": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet1DefaultRoute10708846": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
@@ -349,29 +379,30 @@ Object {
         "AzIdToNameMappingmappingFF3EB1A2",
         "vpcVPCGW7984C166",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
+        "GatewayId": {
           "Ref": "vpcIGWE57CBDCA",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "vpcPublicSubnet1EIPDA49DCBE": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet1EIPDA49DCBE": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
+      "Properties": {
         "Domain": "vpc",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet1",
           },
@@ -379,8 +410,9 @@ Object {
       },
       "Type": "AWS::EC2::EIP",
     },
-    "vpcPublicSubnet1NATGateway9C16659E": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet1NATGateway9C16659E": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
@@ -389,18 +421,18 @@ Object {
         "vpcPublicSubnet1DefaultRoute10708846",
         "vpcPublicSubnet1RouteTableAssociation5D3F4579",
       ],
-      "Properties": Object {
-        "AllocationId": Object {
-          "Fn::GetAtt": Array [
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
             "vpcPublicSubnet1EIPDA49DCBE",
             "AllocationId",
           ],
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcPublicSubnet1Subnet2E65531E",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet1",
           },
@@ -408,81 +440,85 @@ Object {
       },
       "Type": "AWS::EC2::NatGateway",
     },
-    "vpcPublicSubnet1RouteTable48A2DF9B": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet1RouteTable48A2DF9B": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcPublicSubnet1RouteTableAssociation5D3F4579": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet1RouteTableAssociation5D3F4579": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "RouteTableId": Object {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "vpcPublicSubnet1RouteTable48A2DF9B",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcPublicSubnet1Subnet2E65531E",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "vpcPublicSubnet1Subnet2E65531E": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet1Subnet2E65531E": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "AvailabilityZone": Object {
+      "Properties": {
+        "AvailabilityZone": {
           "Ref": "az1Parameter",
         },
         "CidrBlock": "10.0.0.0/18",
         "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet1",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "vpcPublicSubnet2DefaultRouteA1EC0F60": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet2DefaultRouteA1EC0F60": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
@@ -490,29 +526,30 @@ Object {
         "AzIdToNameMappingmappingFF3EB1A2",
         "vpcVPCGW7984C166",
       ],
-      "Properties": Object {
+      "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": Object {
+        "GatewayId": {
           "Ref": "vpcIGWE57CBDCA",
         },
-        "RouteTableId": Object {
+        "RouteTableId": {
           "Ref": "vpcPublicSubnet2RouteTableEB40D4CB",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "vpcPublicSubnet2EIP9B3743B1": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet2EIP9B3743B1": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
+      "Properties": {
         "Domain": "vpc",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet2",
           },
@@ -520,8 +557,9 @@ Object {
       },
       "Type": "AWS::EC2::EIP",
     },
-    "vpcPublicSubnet2NATGateway9B8AE11A": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet2NATGateway9B8AE11A": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
@@ -530,18 +568,18 @@ Object {
         "vpcPublicSubnet2DefaultRouteA1EC0F60",
         "vpcPublicSubnet2RouteTableAssociation21F81B59",
       ],
-      "Properties": Object {
-        "AllocationId": Object {
-          "Fn::GetAtt": Array [
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
             "vpcPublicSubnet2EIP9B3743B1",
             "AllocationId",
           ],
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcPublicSubnet2Subnet009B674F",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet2",
           },
@@ -549,92 +587,96 @@ Object {
       },
       "Type": "AWS::EC2::NatGateway",
     },
-    "vpcPublicSubnet2RouteTableAssociation21F81B59": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet2RouteTableAssociation21F81B59": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "RouteTableId": Object {
+      "Properties": {
+        "RouteTableId": {
           "Ref": "vpcPublicSubnet2RouteTableEB40D4CB",
         },
-        "SubnetId": Object {
+        "SubnetId": {
           "Ref": "vpcPublicSubnet2Subnet009B674F",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "vpcPublicSubnet2RouteTableEB40D4CB": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet2RouteTableEB40D4CB": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "Tags": Array [
-          Object {
+      "Properties": {
+        "Tags": [
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet2",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "vpcPublicSubnet2Subnet009B674F": Object {
-      "DependsOn": Array [
+    "vpcPublicSubnet2Subnet009B674F": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "AvailabilityZone": Object {
+      "Properties": {
+        "AvailabilityZone": {
           "Ref": "az2Parameter",
         },
         "CidrBlock": "10.0.64.0/18",
         "MapPublicIpOnLaunch": true,
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "aws-cdk:subnet-name",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "aws-cdk:subnet-type",
             "Value": "Public",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "TestStack/vpc/PublicSubnet2",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "vpcVPCGW7984C166": Object {
-      "DependsOn": Array [
+    "vpcVPCGW7984C166": {
+      "DependsOn": [
+        "AzIdToNameMappinghandlerLogGroupCDB14C15",
         "AzIdToNameMappinghandler3666E550",
         "AzIdToNameMappinghandlerPolicyBA4D5D94",
         "AzIdToNameMappinghandlerRole0E94DF36",
         "AzIdToNameMappinglogGroup3282D2C7",
         "AzIdToNameMappingmappingFF3EB1A2",
       ],
-      "Properties": Object {
-        "InternetGatewayId": Object {
+      "Properties": {
+        "InternetGatewayId": {
           "Ref": "vpcIGWE57CBDCA",
         },
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "vpcA2121C38",
         },
       },
