@@ -5,37 +5,31 @@
       "type": "build"
     },
     {
+      "name": "@stylistic/eslint-plugin",
+      "version": "^2",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
-      "version": "^27",
       "type": "build"
     },
     {
       "name": "@types/node",
-      "version": "^16",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "version": "^5",
+      "version": "^8",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/parser",
-      "version": "^5",
+      "version": "^8",
       "type": "build"
     },
     {
-      "name": "aws-cdk-lib",
-      "version": "2.100.0",
-      "type": "build"
-    },
-    {
-      "name": "constructs",
-      "version": "10.0.5",
-      "type": "build"
-    },
-    {
-      "name": "eslint-import-resolver-node",
+      "name": "commit-and-tag-version",
+      "version": "^12",
       "type": "build"
     },
     {
@@ -48,7 +42,11 @@
     },
     {
       "name": "eslint",
-      "version": "^8",
+      "version": "^9",
+      "type": "build"
+    },
+    {
+      "name": "jest",
       "type": "build"
     },
     {
@@ -57,12 +55,7 @@
     },
     {
       "name": "jest-junit",
-      "version": "^15",
-      "type": "build"
-    },
-    {
-      "name": "jest",
-      "version": "^27",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -71,6 +64,7 @@
     },
     {
       "name": "jsii-docgen",
+      "version": "^10.5.0",
       "type": "build"
     },
     {
@@ -78,13 +72,13 @@
       "type": "build"
     },
     {
-      "name": "jsii",
-      "version": "1.x",
+      "name": "jsii-rosetta",
+      "version": "~5.6.0",
       "type": "build"
     },
     {
-      "name": "npm-check-updates",
-      "version": "^16",
+      "name": "jsii",
+      "version": "~5.6.0",
       "type": "build"
     },
     {
@@ -92,13 +86,7 @@
       "type": "build"
     },
     {
-      "name": "standard-version",
-      "version": "^9",
-      "type": "build"
-    },
-    {
       "name": "ts-jest",
-      "version": "^27",
       "type": "build"
     },
     {
@@ -110,18 +98,8 @@
       "type": "build"
     },
     {
-      "name": "@types/babel__traverse",
-      "version": "7.18.2",
-      "type": "override"
-    },
-    {
-      "name": "@types/prettier",
-      "version": "2.6.0",
-      "type": "override"
-    },
-    {
       "name": "aws-cdk-lib",
-      "version": "^2.100.0",
+      "version": "^2.200.0",
       "type": "peer"
     },
     {

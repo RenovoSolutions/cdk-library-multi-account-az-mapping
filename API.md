@@ -1,4 +1,3 @@
-# replace this
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
@@ -160,6 +159,7 @@ new AzIdToNameMappingFunctionCodeCache(scope: Construct, id: string, props: AzId
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addEventNotification">addEventNotification</a></code> | Adds a bucket notification event destination. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addObjectCreatedNotification">addObjectCreatedNotification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addObjectRemovedNotification">addObjectRemovedNotification</a></code> | Subscribes a destination to receive notifications when an object is removed from the bucket. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addReplicationPolicy">addReplicationPolicy</a></code> | Function to add required permissions to the destination bucket for cross account replication. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addToResourcePolicy">addToResourcePolicy</a></code> | Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use `bucketArn` and `arnForObjects(keys)` to obtain ARNs for this bucket or objects. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.arnForObjects">arnForObjects</a></code> | Returns an ARN that represents all objects within the bucket that match the key pattern specified. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.enableEventBridgeNotification">enableEventBridgeNotification</a></code> | Enables event bridge notification, causing all events below to be sent to EventBridge:. |
@@ -169,6 +169,7 @@ new AzIdToNameMappingFunctionCodeCache(scope: Construct, id: string, props: AzId
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantPutAcl">grantPutAcl</a></code> | Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantRead">grantRead</a></code> | Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantReadWrite">grantReadWrite</a></code> | Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantReplicationPermission">grantReplicationPermission</a></code> | Grant replication permission to a principal. This method allows the principal to perform replication operations on this bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantWrite">grantWrite</a></code> | Grant write permissions to this bucket to an IAM principal. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.onCloudTrailEvent">onCloudTrailEvent</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.onCloudTrailPutObject">onCloudTrailPutObject</a></code> | Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call. |
@@ -220,7 +221,7 @@ account for data recovery and cleanup later (`RemovalPolicy.RETAIN`).
 ##### `addEventNotification` <a name="addEventNotification" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addEventNotification"></a>
 
 ```typescript
-public addEventNotification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+public addEventNotification(event: EventType, dest: IBucketNotificationDestination, filters: ...NotificationKeyFilter[]): void
 ```
 
 Adds a bucket notification event destination.
@@ -254,7 +255,7 @@ The notification destination (Lambda, SNS Topic or SQS Queue).
 
 ###### `filters`<sup>Required</sup> <a name="filters" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addEventNotification.parameter.filters"></a>
 
-- *Type:* aws-cdk-lib.aws_s3.NotificationKeyFilter
+- *Type:* ...aws-cdk-lib.aws_s3.NotificationKeyFilter[]
 
 S3 object key filter rules to determine which objects trigger this event.
 
@@ -267,7 +268,7 @@ for details about allowed filter rules.
 ##### `addObjectCreatedNotification` <a name="addObjectCreatedNotification" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addObjectCreatedNotification"></a>
 
 ```typescript
-public addObjectCreatedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+public addObjectCreatedNotification(dest: IBucketNotificationDestination, filters: ...NotificationKeyFilter[]): void
 ```
 
 Subscribes a destination to receive notifications when an object is created in the bucket.
@@ -285,7 +286,7 @@ The notification destination (see onEvent).
 
 ###### `filters`<sup>Required</sup> <a name="filters" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addObjectCreatedNotification.parameter.filters"></a>
 
-- *Type:* aws-cdk-lib.aws_s3.NotificationKeyFilter
+- *Type:* ...aws-cdk-lib.aws_s3.NotificationKeyFilter[]
 
 Filters (see onEvent).
 
@@ -294,7 +295,7 @@ Filters (see onEvent).
 ##### `addObjectRemovedNotification` <a name="addObjectRemovedNotification" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addObjectRemovedNotification"></a>
 
 ```typescript
-public addObjectRemovedNotification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+public addObjectRemovedNotification(dest: IBucketNotificationDestination, filters: ...NotificationKeyFilter[]): void
 ```
 
 Subscribes a destination to receive notifications when an object is removed from the bucket.
@@ -312,9 +313,39 @@ The notification destination (see onEvent).
 
 ###### `filters`<sup>Required</sup> <a name="filters" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addObjectRemovedNotification.parameter.filters"></a>
 
-- *Type:* aws-cdk-lib.aws_s3.NotificationKeyFilter
+- *Type:* ...aws-cdk-lib.aws_s3.NotificationKeyFilter[]
 
 Filters (see onEvent).
+
+---
+
+##### `addReplicationPolicy` <a name="addReplicationPolicy" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addReplicationPolicy"></a>
+
+```typescript
+public addReplicationPolicy(roleArn: string, accessControlTransition?: boolean, account?: string): void
+```
+
+Function to add required permissions to the destination bucket for cross account replication.
+
+These permissions will be added as a resource based policy on the bucket
+
+> [https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-accesscontroltranslation.html](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-accesscontroltranslation.html)
+
+###### `roleArn`<sup>Required</sup> <a name="roleArn" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addReplicationPolicy.parameter.roleArn"></a>
+
+- *Type:* string
+
+---
+
+###### `accessControlTransition`<sup>Optional</sup> <a name="accessControlTransition" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addReplicationPolicy.parameter.accessControlTransition"></a>
+
+- *Type:* boolean
+
+---
+
+###### `account`<sup>Optional</sup> <a name="account" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.addReplicationPolicy.parameter.account"></a>
+
+- *Type:* string
 
 ---
 
@@ -401,12 +432,14 @@ The principal.
 
 Restrict the permission to a certain key pattern (default '*').
 
+Parameter type is `any` but `string` should be passed in.
+
 ---
 
 ##### `grantPublicAccess` <a name="grantPublicAccess" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantPublicAccess"></a>
 
 ```typescript
-public grantPublicAccess(allowedActions: string, keyPrefix?: string): Grant
+public grantPublicAccess(allowedActions: ...string[], keyPrefix?: string): Grant
 ```
 
 Allows unrestricted access to objects from this bucket.
@@ -432,7 +465,7 @@ impossible to modify the policy of an existing bucket.
 
 ###### `allowedActions`<sup>Required</sup> <a name="allowedActions" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantPublicAccess.parameter.allowedActions"></a>
 
-- *Type:* string
+- *Type:* ...string[]
 
 the set of S3 actions to allow.
 
@@ -472,6 +505,8 @@ The principal.
 - *Type:* any
 
 Restrict the permission to a certain key pattern (default '*').
+
+Parameter type is `any` but `string` should be passed in.
 
 ---
 
@@ -524,6 +559,8 @@ The principal.
 
 Restrict the permission to a certain key pattern (default '*').
 
+Parameter type is `any` but `string` should be passed in.
+
 ---
 
 ##### `grantReadWrite` <a name="grantReadWrite" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantReadWrite"></a>
@@ -554,6 +591,33 @@ use the `grantPutAcl` method.
 ###### `objectsKeyPattern`<sup>Optional</sup> <a name="objectsKeyPattern" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantReadWrite.parameter.objectsKeyPattern"></a>
 
 - *Type:* any
+
+---
+
+##### `grantReplicationPermission` <a name="grantReplicationPermission" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantReplicationPermission"></a>
+
+```typescript
+public grantReplicationPermission(identity: IGrantable, props: GrantReplicationPermissionProps): Grant
+```
+
+Grant replication permission to a principal. This method allows the principal to perform replication operations on this bucket.
+
+Note that when calling this function for source or destination buckets that support KMS encryption,
+you need to specify the KMS key for encryption and the KMS key for decryption, respectively.
+
+###### `identity`<sup>Required</sup> <a name="identity" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantReplicationPermission.parameter.identity"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+The principal to grant replication permission to.
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.grantReplicationPermission.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_s3.GrantReplicationPermissionProps
+
+The properties of the replication source and destination buckets.
 
 ---
 
@@ -1091,7 +1155,7 @@ Create a mutable `IBucket` based on a low-level `CfnBucket`.
 ```typescript
 import { AzIdToNameMappingFunctionCodeCache } from '@renovosolutions/cdk-library-multi-account-az-mapping'
 
-AzIdToNameMappingFunctionCodeCache.validateBucketName(physicalName: string)
+AzIdToNameMappingFunctionCodeCache.validateBucketName(physicalName: string, allowLegacyBucketNaming?: boolean)
 ```
 
 Thrown an exception if the given bucket name is not valid.
@@ -1101,6 +1165,14 @@ Thrown an exception if the given bucket name is not valid.
 - *Type:* string
 
 name of the bucket.
+
+---
+
+###### `allowLegacyBucketNaming`<sup>Optional</sup> <a name="allowLegacyBucketNaming" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.validateBucketName.parameter.allowLegacyBucketNaming"></a>
+
+- *Type:* boolean
+
+allow legacy bucket naming style, default is false.
 
 ---
 
@@ -1121,6 +1193,7 @@ name of the bucket.
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | Optional KMS encryption key associated with this bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.isWebsite">isWebsite</a></code> | <code>boolean</code> | If this bucket has been configured for static website hosting. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.policy">policy</a></code> | <code>aws-cdk-lib.aws_s3.BucketPolicy</code> | The resource policy associated with this bucket. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.replicationRoleArn">replicationRoleArn</a></code> | <code>string</code> | Role used to set up permissions on this bucket for replication. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.lambdaCode">lambdaCode</a></code> | <code>aws-cdk-lib.aws_lambda.Code</code> | The lambda.Code object that represents the contents of the bucket. |
 
 ---
@@ -1291,6 +1364,18 @@ first call to addToResourcePolicy(s).
 
 ---
 
+##### `replicationRoleArn`<sup>Optional</sup> <a name="replicationRoleArn" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.replicationRoleArn"></a>
+
+```typescript
+public readonly replicationRoleArn: string;
+```
+
+- *Type:* string
+
+Role used to set up permissions on this bucket for replication.
+
+---
+
 ##### `lambdaCode`<sup>Required</sup> <a name="lambdaCode" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.lambdaCode"></a>
 
 ```typescript
@@ -1303,6 +1388,25 @@ The lambda.Code object that represents the contents of the bucket.
 
 ---
 
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.PROPERTY_INJECTION_ID">PROPERTY_INJECTION_ID</a></code> | <code>string</code> | Uniquely identifies this class. |
+
+---
+
+##### `PROPERTY_INJECTION_ID`<sup>Required</sup> <a name="PROPERTY_INJECTION_ID" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCache.property.PROPERTY_INJECTION_ID"></a>
+
+```typescript
+public readonly PROPERTY_INJECTION_ID: string;
+```
+
+- *Type:* string
+
+Uniquely identifies this class.
+
+---
 
 ## Structs <a name="Structs" id="Structs"></a>
 
@@ -1330,20 +1434,25 @@ const azIdToNameMappingFunctionCodeCacheProps: AzIdToNameMappingFunctionCodeCach
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.encryptionKey">encryptionKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | External KMS key to use for bucket encryption. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.enforceSSL">enforceSSL</a></code> | <code>boolean</code> | Enforces SSL for requests. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.eventBridgeEnabled">eventBridgeEnabled</a></code> | <code>boolean</code> | Whether this bucket should send notifications to Amazon EventBridge or not. |
-| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.intelligentTieringConfigurations">intelligentTieringConfigurations</a></code> | <code>aws-cdk-lib.aws_s3.IntelligentTieringConfiguration[]</code> | Inteligent Tiering Configurations. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.intelligentTieringConfigurations">intelligentTieringConfigurations</a></code> | <code>aws-cdk-lib.aws_s3.IntelligentTieringConfiguration[]</code> | Intelligent Tiering Configurations. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.inventories">inventories</a></code> | <code>aws-cdk-lib.aws_s3.Inventory[]</code> | The inventory configuration of the bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.lifecycleRules">lifecycleRules</a></code> | <code>aws-cdk-lib.aws_s3.LifecycleRule[]</code> | Rules that define how Amazon S3 manages objects during their lifetime. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.metrics">metrics</a></code> | <code>aws-cdk-lib.aws_s3.BucketMetrics[]</code> | The metrics configuration of this bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.minimumTLSVersion">minimumTLSVersion</a></code> | <code>number</code> | Enforces minimum TLS version for requests. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.notificationsHandlerRole">notificationsHandlerRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The role to be used by the notifications handler. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.notificationsSkipDestinationValidation">notificationsSkipDestinationValidation</a></code> | <code>boolean</code> | Skips notification validation of Amazon SQS, Amazon SNS, and Lambda destinations. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.objectLockDefaultRetention">objectLockDefaultRetention</a></code> | <code>aws-cdk-lib.aws_s3.ObjectLockRetention</code> | The default retention mode and rules for S3 Object Lock. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.objectLockEnabled">objectLockEnabled</a></code> | <code>boolean</code> | Enable object lock on the bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.objectOwnership">objectOwnership</a></code> | <code>aws-cdk-lib.aws_s3.ObjectOwnership</code> | The objectOwnership of the bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.publicReadAccess">publicReadAccess</a></code> | <code>boolean</code> | Grants public read access to all objects in the bucket. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Policy to apply when the bucket is removed from this stack. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.replicationRole">replicationRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The role to be used by the replication. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.replicationRules">replicationRules</a></code> | <code>aws-cdk-lib.aws_s3.ReplicationRule[]</code> | A container for one or more replication rules. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.serverAccessLogsBucket">serverAccessLogsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination bucket for the server access logs. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.serverAccessLogsPrefix">serverAccessLogsPrefix</a></code> | <code>string</code> | Optional log file prefix to use for the bucket's access logs. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.targetObjectKeyFormat">targetObjectKeyFormat</a></code> | <code>aws-cdk-lib.aws_s3.TargetObjectKeyFormat</code> | Optional key format for log objects. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.transferAcceleration">transferAcceleration</a></code> | <code>boolean</code> | Whether this bucket should have transfer acceleration turned on or not. |
+| <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.transitionDefaultMinimumObjectSize">transitionDefaultMinimumObjectSize</a></code> | <code>aws-cdk-lib.aws_s3.TransitionDefaultMinimumObjectSize</code> | Indicates which default minimum object size behavior is applied to the lifecycle configuration. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.versioned">versioned</a></code> | <code>boolean</code> | Whether this bucket should have versioning turned on or not. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.websiteErrorDocument">websiteErrorDocument</a></code> | <code>string</code> | The name of the error document (e.g. "404.html") for the website. `websiteIndexDocument` must also be set if this is set. |
 | <code><a href="#@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.websiteIndexDocument">websiteIndexDocument</a></code> | <code>string</code> | The name of the index document (e.g. "index.html") for the website. Enables static website hosting for this bucket. |
@@ -1383,6 +1492,11 @@ switching this to `false` in a CDK version *before* `1.126.0` will lead to
 all objects in the bucket being deleted. Be sure to update your bucket resources
 by deploying with CDK version `1.126.0` or later **before** switching this value to `false`.
 
+Setting `autoDeleteObjects` to true on a bucket will add `s3:PutBucketPolicy` to the
+bucket policy. This is because during bucket deletion, the custom resource provider
+needs to update the bucket policy by adding a deny policy for `s3:PutObject` to
+prevent race conditions with external bucket writers.
+
 ---
 
 ##### `blockPublicAccess`<sup>Optional</sup> <a name="blockPublicAccess" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.blockPublicAccess"></a>
@@ -1417,7 +1531,7 @@ Only relevant when using KMS for encryption.
   attendant cost implications of that).
 - If enabled, S3 will use its own time-limited key instead.
 
-Only relevant, when Encryption is set to `BucketEncryption.KMS` or `BucketEncryption.KMS_MANAGED`.
+Only relevant, when Encryption is not set to `BucketEncryption.UNENCRYPTED`.
 
 ---
 
@@ -1456,7 +1570,7 @@ public readonly encryption: BucketEncryption;
 ```
 
 - *Type:* aws-cdk-lib.aws_s3.BucketEncryption
-- *Default:* `KMS` if `encryptionKey` is specified, or `UNENCRYPTED` otherwise. But if `UNENCRYPTED` is specified, the bucket will be encrypted as `S3_MANAGED` automatically.
+- *Default:* `KMS` if `encryptionKey` is specified, or `S3_MANAGED` otherwise.
 
 The kind of server-side encryption to apply to this bucket.
 
@@ -1520,7 +1634,7 @@ public readonly intelligentTieringConfigurations: IntelligentTieringConfiguratio
 - *Type:* aws-cdk-lib.aws_s3.IntelligentTieringConfiguration[]
 - *Default:* No Intelligent Tiiering Configurations.
 
-Inteligent Tiering Configurations.
+Intelligent Tiering Configurations.
 
 > [https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html)
 
@@ -1599,6 +1713,19 @@ The role to be used by the notifications handler.
 
 ---
 
+##### `notificationsSkipDestinationValidation`<sup>Optional</sup> <a name="notificationsSkipDestinationValidation" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.notificationsSkipDestinationValidation"></a>
+
+```typescript
+public readonly notificationsSkipDestinationValidation: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Skips notification validation of Amazon SQS, Amazon SNS, and Lambda destinations.
+
+---
+
 ##### `objectLockDefaultRetention`<sup>Optional</sup> <a name="objectLockDefaultRetention" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.objectLockDefaultRetention"></a>
 
 ```typescript
@@ -1642,7 +1769,7 @@ public readonly objectOwnership: ObjectOwnership;
 ```
 
 - *Type:* aws-cdk-lib.aws_s3.ObjectOwnership
-- *Default:* No ObjectOwnership configuration, uploading account will own the object.
+- *Default:* No ObjectOwnership configuration. By default, Amazon S3 sets Object Ownership to `Bucket owner enforced`. This means ACLs are disabled and the bucket owner will own every object.
 
 The objectOwnership of the bucket.
 
@@ -1678,6 +1805,34 @@ Policy to apply when the bucket is removed from this stack.
 
 ---
 
+##### `replicationRole`<sup>Optional</sup> <a name="replicationRole" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.replicationRole"></a>
+
+```typescript
+public readonly replicationRole: IRole;
+```
+
+- *Type:* aws-cdk-lib.aws_iam.IRole
+- *Default:* a new role will be created.
+
+The role to be used by the replication.
+
+When setting this property, you must also set `replicationRules`.
+
+---
+
+##### `replicationRules`<sup>Optional</sup> <a name="replicationRules" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.replicationRules"></a>
+
+```typescript
+public readonly replicationRules: ReplicationRule[];
+```
+
+- *Type:* aws-cdk-lib.aws_s3.ReplicationRule[]
+- *Default:* No replication
+
+A container for one or more replication rules.
+
+---
+
 ##### `serverAccessLogsBucket`<sup>Optional</sup> <a name="serverAccessLogsBucket" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.serverAccessLogsBucket"></a>
 
 ```typescript
@@ -1706,6 +1861,19 @@ If defined without "serverAccessLogsBucket", enables access logs to current buck
 
 ---
 
+##### `targetObjectKeyFormat`<sup>Optional</sup> <a name="targetObjectKeyFormat" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.targetObjectKeyFormat"></a>
+
+```typescript
+public readonly targetObjectKeyFormat: TargetObjectKeyFormat;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.TargetObjectKeyFormat
+- *Default:* the default key format is: [DestinationPrefix][YYYY]-[MM]-[DD]-[hh]-[mm]-[ss]-[UniqueString]
+
+Optional key format for log objects.
+
+---
+
 ##### `transferAcceleration`<sup>Optional</sup> <a name="transferAcceleration" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.transferAcceleration"></a>
 
 ```typescript
@@ -1716,6 +1884,23 @@ public readonly transferAcceleration: boolean;
 - *Default:* false
 
 Whether this bucket should have transfer acceleration turned on or not.
+
+---
+
+##### `transitionDefaultMinimumObjectSize`<sup>Optional</sup> <a name="transitionDefaultMinimumObjectSize" id="@renovosolutions/cdk-library-multi-account-az-mapping.AzIdToNameMappingFunctionCodeCacheProps.property.transitionDefaultMinimumObjectSize"></a>
+
+```typescript
+public readonly transitionDefaultMinimumObjectSize: TransitionDefaultMinimumObjectSize;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.TransitionDefaultMinimumObjectSize
+- *Default:* TransitionDefaultMinimumObjectSize.VARIES_BY_STORAGE_CLASS before September 2024, otherwise TransitionDefaultMinimumObjectSize.ALL_STORAGE_CLASSES_128_K.
+
+Indicates which default minimum object size behavior is applied to the lifecycle configuration.
+
+To customize the minimum object size for any transition you can add a filter that specifies a custom
+`objectSizeGreaterThan` or `objectSizeLessThan` for `lifecycleRules` property. Custom filters always
+take precedence over the default transition behavior.
 
 ---
 
