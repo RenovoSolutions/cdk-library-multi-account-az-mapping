@@ -17,6 +17,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   ],
   depsUpgrade: true,
   depsUpgradeOptions: {
+    workflow: false,
     workflowOptions: {
       labels: ['auto-approve', 'deps-upgrade'],
     },
@@ -27,7 +28,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-cdk/assert',
   ],
   githubOptions: {
-    mergify: true,
+    mergify: false,
     mergifyOptions: {
       rules: [
         {
@@ -50,7 +51,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
       ],
     },
     pullRequestLintOptions: {
-      semanticTitle: true,
+      semanticTitle: false,
       semanticTitleOptions: {
         types: [
           'chore',
@@ -66,7 +67,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   releaseToNpm: true,
   npmAccess: javascript.NpmAccess.PUBLIC,
-  releaseWorkflow: true,
+  buildWorkflow: false,
+  release: true,
   docgen: true,
   eslint: true,
   publishToPypi: {
@@ -83,11 +85,13 @@ const project = new awscdk.AwsCdkConstructLibrary({
 new javascript.UpgradeDependencies(project, {
   include: ['projen'],
   taskName: 'upgrade-projen',
-  workflow: true,
+  workflow: false,
   workflowOptions: {
     schedule: javascript.UpgradeDependenciesSchedule.expressions(['0 2 * * 1']),
   },
   pullRequestTitle: 'upgrade projen',
 });
+
+project.gitignore.addPatterns('.github/workflows/release.yml');
 
 project.synth();
