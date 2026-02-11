@@ -1,13 +1,13 @@
 import * as path from 'path';
 import {
-  aws_lambda as lambda,
-  Duration,
-  aws_logs as logs,
-  CustomResource,
   aws_iam as iam,
+  aws_lambda as lambda,
+  aws_logs as logs,
   aws_s3 as s3,
-  RemovalPolicy,
   aws_s3_deployment as s3Deploy,
+  CustomResource,
+  Duration,
+  RemovalPolicy,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
@@ -59,8 +59,14 @@ export class AzIdToNameMapping extends Construct {
    */
   public readonly mapping: string;
 
+  /**
+   * Constructs a new instance of the AzIdToNameMapping class.
+   * @param scope Parent construct scope
+   * @param id Construct ID
+   * @param props Construct properties
+   */
   constructor(scope: Construct, id: string, props: AzIdToNameMappingProps) {
-    super (scope, id);
+    super(scope, id);
 
     const handlerPolicy = new iam.ManagedPolicy(this, 'handlerPolicy', {
       statements: [
@@ -108,10 +114,10 @@ export class AzIdToNameMapping extends Construct {
     ];
 
     const onEventHandler = new lambda.Function(this, 'handler', {
-      runtime: lambda.Runtime.PYTHON_3_13,
+      runtime: lambda.Runtime.PYTHON_3_14,
       code: props.lambdaCode ?? lambda.Code.fromAsset(path.join(__dirname, '../lambda'), {
         bundling: {
-          image: lambda.Runtime.PYTHON_3_13.bundlingImage,
+          image: lambda.Runtime.PYTHON_3_14.bundlingImage,
           command: [
             'bash', '-c', bundlingCmds.join(' && '),
           ],
@@ -141,7 +147,7 @@ export class AzIdToNameMapping extends Construct {
   }
 }
 
-export interface AzIdToNameMappingFunctionCodeCacheProps extends s3.BucketProps {}
+export interface AzIdToNameMappingFunctionCodeCacheProps extends s3.BucketProps { }
 
 export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
   /**
@@ -149,12 +155,20 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
    */
   public readonly lambdaCode: lambda.Code;
 
+  /**
+   * Constructs a new instance of the AzIdToNameMappingFunctionCodeCache class.
+   * @param scope Parent construct scope
+   * @param id Construct ID
+   * @param props Construct properties
+   */
   constructor(scope: Construct, id: string, props: AzIdToNameMappingFunctionCodeCacheProps) {
     const removalPolicy = props.removalPolicy ?? RemovalPolicy.DESTROY;
     const autoDeleteObjects = removalPolicy === RemovalPolicy.DESTROY;
+    const versioned = props.versioned ?? true;
     super(scope, id, {
       removalPolicy,
       autoDeleteObjects,
+      versioned,
       ...props,
     });
 
@@ -174,7 +188,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     new s3Deploy.BucketDeployment(this, 'Deployment', {
       sources: [s3Deploy.Source.asset(path.join(__dirname, '../lambda'), {
         bundling: {
-          image: lambda.Runtime.PYTHON_3_13.bundlingImage,
+          image: lambda.Runtime.PYTHON_3_14.bundlingImage,
           command: [
             'bash', '-c', bundlingCmds.join(' && '),
           ],
@@ -185,7 +199,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
       include: ['*.py'],
     });
 
-    this.lambdaCode = lambda.Code.fromBucket(this, 'index.py');
+    this.lambdaCode = lambda.Code.fromBucket(this, 'lambda.zip');
   }
 
   /**
@@ -200,6 +214,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
       principals: [new iam.StarPrincipal],
       actions: [
         's3:GetObject',
+        's3:GetObjectVersion',
       ],
       resources: [this.arnForObjects('*')],
       conditions: {
@@ -221,7 +236,10 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     return this.addToResourcePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       principals: [new iam.AccountPrincipal(principalAccountId)],
-      actions: ['s3:GetObject'],
+      actions: [
+        's3:GetObject',
+        's3:GetObjectVersion',
+      ],
       resources: [this.arnForObjects('*')],
       conditions: principalOrgId === undefined ? undefined : {
         StringEquals: {
@@ -241,7 +259,10 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     return this.addToResourcePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       principals: [new iam.StarPrincipal],
-      actions: ['s3:GetObject'],
+      actions: [
+        's3:GetObject',
+        's3:GetObjectVersion',
+      ],
       resources: [this.arnForObjects('*')],
       conditions: {
         StringLike: {

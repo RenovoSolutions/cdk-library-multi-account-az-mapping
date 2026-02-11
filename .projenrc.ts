@@ -3,8 +3,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   projenrcTs: true,
   author: 'Renovo Solutions',
   authorAddress: 'webmaster+cdk@renovo1.com',
-  cdkVersion: '2.202.0',
-  jsiiVersion: '^5.8.0',
+  cdkVersion: '2.238.0',
+  jsiiVersion: '^5.9',
   defaultReleaseBranch: 'main',
   name: '@renovosolutions/cdk-library-multi-account-az-mapping',
   description: 'AWS CDK Construct Library to map zone-ids to zone-names to support multi-account zonal consistency for VPCs',
@@ -75,11 +75,20 @@ const project = new awscdk.AwsCdkConstructLibrary({
     distName: 'renovosolutions.aws-cdk-multi-account-az-mapping',
     module: 'renovosolutions_multi_account_az_mapping',
   },
-  publishToNuget: {
-    dotNetNamespace: 'renovosolutions',
-    packageId: 'Renovo.AWSCDK.MultiAccountAzMapping',
-  },
   gitignore: ['**/__pycache__/**'],
+  tsconfigDev: {
+    compilerOptions: {
+      isolatedModules: true,
+    },
+  },
+});
+
+project.eslint?.addRules({
+  '@typescript-eslint/no-unused-vars': ['error', {
+    argsIgnorePattern: '^_',
+    varsIgnorePattern: '^_',
+    caughtErrorsIgnorePattern: '^_',
+  }],
 });
 
 new javascript.UpgradeDependencies(project, {
