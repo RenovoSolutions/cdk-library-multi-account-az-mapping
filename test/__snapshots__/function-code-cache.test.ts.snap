@@ -2,6 +2,13 @@
 
 exports[`FunctionCodeCache with addAccountAccessPolicy with org ID 1`] = `
 {
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
   "Resources": {
     "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
       "DependsOn": [
@@ -9,7 +16,11 @@ exports[`FunctionCodeCache with addAccountAccessPolicy with org ID 1`] = `
         "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Environment": {
           "Variables": {
             "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
@@ -162,7 +173,11 @@ exports[`FunctionCodeCache with addAccountAccessPolicy with org ID 1`] = `
         "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Description": {
           "Fn::Join": [
             "",
@@ -286,9 +301,6 @@ exports[`FunctionCodeCache with addAccountAccessPolicy with org ID 1`] = `
           {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-        ],
-        "SourceObjectKeys": [
-          "b4f567c339fbf0778b00f58e0c01329289e5d276654f089e645ebaf2e07eaa51.zip",
         ],
         "WaitForDistributionInvalidation": true,
       },
@@ -388,11 +400,45 @@ exports[`FunctionCodeCache with addAccountAccessPolicy with org ID 1`] = `
       "Type": "AWS::S3::BucketPolicy",
     },
   },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
 }
 `;
 
 exports[`FunctionCodeCache with addAccountAccessPolicy without org ID 1`] = `
 {
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
   "Resources": {
     "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
       "DependsOn": [
@@ -400,7 +446,11 @@ exports[`FunctionCodeCache with addAccountAccessPolicy without org ID 1`] = `
         "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Environment": {
           "Variables": {
             "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
@@ -553,7 +603,11 @@ exports[`FunctionCodeCache with addAccountAccessPolicy without org ID 1`] = `
         "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Description": {
           "Fn::Join": [
             "",
@@ -677,9 +731,6 @@ exports[`FunctionCodeCache with addAccountAccessPolicy without org ID 1`] = `
           {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-        ],
-        "SourceObjectKeys": [
-          "34055ee5fda3c7ad0a08a8c1a56032462f95684577163d792d7743eee7013a4f.zip",
         ],
         "WaitForDistributionInvalidation": true,
       },
@@ -774,11 +825,45 @@ exports[`FunctionCodeCache with addAccountAccessPolicy without org ID 1`] = `
       "Type": "AWS::S3::BucketPolicy",
     },
   },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
 }
 `;
 
 exports[`FunctionCodeCache with addOrgOuAccessPolicy 1`] = `
 {
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
   "Resources": {
     "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
       "DependsOn": [
@@ -786,7 +871,11 @@ exports[`FunctionCodeCache with addOrgOuAccessPolicy 1`] = `
         "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Environment": {
           "Variables": {
             "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
@@ -939,7 +1028,11 @@ exports[`FunctionCodeCache with addOrgOuAccessPolicy 1`] = `
         "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Description": {
           "Fn::Join": [
             "",
@@ -1063,9 +1156,6 @@ exports[`FunctionCodeCache with addOrgOuAccessPolicy 1`] = `
           {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-        ],
-        "SourceObjectKeys": [
-          "e1c5cc8cce0486b1b190c3b705ed988f5c9adefc78303d51410db12c4e1dfda0.zip",
         ],
         "WaitForDistributionInvalidation": true,
       },
@@ -1155,11 +1245,45 @@ exports[`FunctionCodeCache with addOrgOuAccessPolicy 1`] = `
       "Type": "AWS::S3::BucketPolicy",
     },
   },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
 }
 `;
 
 exports[`FunctionCodeCache with addOrgWideAccessPolicy 1`] = `
 {
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
   "Resources": {
     "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
       "DependsOn": [
@@ -1167,7 +1291,11 @@ exports[`FunctionCodeCache with addOrgWideAccessPolicy 1`] = `
         "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Environment": {
           "Variables": {
             "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
@@ -1320,7 +1448,11 @@ exports[`FunctionCodeCache with addOrgWideAccessPolicy 1`] = `
         "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
       ],
       "Properties": {
-        "Code": Any<Object>,
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+        },
         "Description": {
           "Fn::Join": [
             "",
@@ -1445,9 +1577,6 @@ exports[`FunctionCodeCache with addOrgWideAccessPolicy 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
         ],
-        "SourceObjectKeys": [
-          "0c03a03c970d27e92a3a8fb646fd72b4962055943f42c57533e8fab30496fd57.zip",
-        ],
         "WaitForDistributionInvalidation": true,
       },
       "Type": "Custom::CDKBucketDeployment",
@@ -1531,6 +1660,33 @@ exports[`FunctionCodeCache with addOrgWideAccessPolicy 1`] = `
         },
       },
       "Type": "AWS::S3::BucketPolicy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
     },
   },
 }
