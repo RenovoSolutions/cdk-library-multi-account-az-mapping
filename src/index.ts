@@ -114,10 +114,10 @@ export class AzIdToNameMapping extends Construct {
     ];
 
     const onEventHandler = new lambda.Function(this, 'handler', {
-      runtime: lambda.Runtime.PYTHON_3_13,
+      runtime: lambda.Runtime.PYTHON_3_14,
       code: props.lambdaCode ?? lambda.Code.fromAsset(path.join(__dirname, '../lambda'), {
         bundling: {
-          image: lambda.Runtime.PYTHON_3_13.bundlingImage,
+          image: lambda.Runtime.PYTHON_3_14.bundlingImage,
           command: [
             'bash', '-c', bundlingCmds.join(' && '),
           ],
@@ -186,7 +186,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     new s3Deploy.BucketDeployment(this, 'Deployment', {
       sources: [s3Deploy.Source.asset(path.join(__dirname, '../lambda'), {
         bundling: {
-          image: lambda.Runtime.PYTHON_3_13.bundlingImage,
+          image: lambda.Runtime.PYTHON_3_14.bundlingImage,
           command: [
             'bash', '-c', bundlingCmds.join(' && '),
           ],
