@@ -164,9 +164,11 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
   constructor(scope: Construct, id: string, props: AzIdToNameMappingFunctionCodeCacheProps) {
     const removalPolicy = props.removalPolicy ?? RemovalPolicy.DESTROY;
     const autoDeleteObjects = removalPolicy === RemovalPolicy.DESTROY;
+    const versioned = props.versioned ?? true;
     super(scope, id, {
       removalPolicy,
       autoDeleteObjects,
+      versioned,
       ...props,
     });
 
@@ -212,6 +214,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
       principals: [new iam.StarPrincipal],
       actions: [
         's3:GetObject',
+        's3:GetObjectVersion',
       ],
       resources: [this.arnForObjects('*')],
       conditions: {
@@ -233,7 +236,10 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     return this.addToResourcePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       principals: [new iam.AccountPrincipal(principalAccountId)],
-      actions: ['s3:GetObject'],
+      actions: [
+        's3:GetObject',
+        's3:GetObjectVersion',
+      ],
       resources: [this.arnForObjects('*')],
       conditions: principalOrgId === undefined ? undefined : {
         StringEquals: {
@@ -253,7 +259,10 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
     return this.addToResourcePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       principals: [new iam.StarPrincipal],
-      actions: ['s3:GetObject'],
+      actions: [
+        's3:GetObject',
+        's3:GetObjectVersion',
+      ],
       resources: [this.arnForObjects('*')],
       conditions: {
         StringLike: {
