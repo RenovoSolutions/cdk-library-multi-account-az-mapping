@@ -59,8 +59,14 @@ export class AzIdToNameMapping extends Construct {
    */
   public readonly mapping: string;
 
+  /**
+   * Constructs a new instance of the AzIdToNameMapping class.
+   * @param scope Parent construct scope
+   * @param id Construct ID
+   * @param props Construct properties
+   */
   constructor(scope: Construct, id: string, props: AzIdToNameMappingProps) {
-    super (scope, id);
+    super(scope, id);
 
     const handlerPolicy = new iam.ManagedPolicy(this, 'handlerPolicy', {
       statements: [
@@ -141,7 +147,7 @@ export class AzIdToNameMapping extends Construct {
   }
 }
 
-export interface AzIdToNameMappingFunctionCodeCacheProps extends s3.BucketProps {}
+export interface AzIdToNameMappingFunctionCodeCacheProps extends s3.BucketProps { }
 
 export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
   /**
@@ -149,6 +155,12 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
    */
   public readonly lambdaCode: lambda.Code;
 
+  /**
+   * Constructs a new instance of the AzIdToNameMappingFunctionCodeCache class.
+   * @param scope Parent construct scope
+   * @param id Construct ID
+   * @param props Construct properties
+   */
   constructor(scope: Construct, id: string, props: AzIdToNameMappingFunctionCodeCacheProps) {
     const removalPolicy = props.removalPolicy ?? RemovalPolicy.DESTROY;
     const autoDeleteObjects = removalPolicy === RemovalPolicy.DESTROY;
