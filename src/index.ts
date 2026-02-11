@@ -199,7 +199,7 @@ export class AzIdToNameMappingFunctionCodeCache extends s3.Bucket {
       include: ['*.py'],
     });
 
-    this.lambdaCode = lambda.Code.fromBucket(this, 'index.py');
+    this.lambdaCode = lambda.Code.fromBucket(this, 'lambda.zip');
   }
 
   /**
