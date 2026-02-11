@@ -1,13 +1,13 @@
 import * as path from 'path';
 import {
-  aws_lambda as lambda,
-  Duration,
-  aws_logs as logs,
-  CustomResource,
   aws_iam as iam,
+  aws_lambda as lambda,
+  aws_logs as logs,
   aws_s3 as s3,
-  RemovalPolicy,
   aws_s3_deployment as s3Deploy,
+  CustomResource,
+  Duration,
+  RemovalPolicy,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
